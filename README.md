@@ -29,15 +29,15 @@ Send `Authorization: Bearer <token>` for employee routes. Successful login retur
 
 ## Security and errors
 
-Passwords are hashed with bcryptjs (12 rounds) and never returned. JWTs are signed with `JWT_SECRET` and expire. Helmet sets security headers. express-validator checks fields, formats, salary, dates, and IDs. General traffic is limited to 300 requests per 15 minutes per IP; signup and login have a shared limit of 10 per 15 minutes. Exceeding a limit returns 429. Typical statuses: 400 validation, 401 authentication, 404 route/employee (including unowned records), 409 duplicate account, 429 rate limit, and 500 unexpected errors.
+Passwords are hashed with bcryptjs (12 rounds) and never returned. JWTs are signed with `JWT_SECRET` and expire. Helmet sets security headers. express-validator checks fields, formats, salary, dates, and IDs. General traffic is limited to 300 requests per 15 minutes per IP. Signup and login each have a separate limit of 10 requests per 15 minutes per IP. Exceeding a limit returns 429 with a JSON error. The Postman collection includes burst tests for both authentication routes. Typical statuses: 400 validation, 401 authentication, 404 route/employee (including unowned records), 409 duplicate account, 429 rate limit, and 500 unexpected errors.
 
 ## Logging and health
 
-Request logs and application events go to `logs/app.log`, including timestamp, method/path/status and authentication, validation, authorization, startup, and error events. Passwords and full tokens are excluded. `GET /health` reports service state, MongoDB connection state, and timestamp.
+Request logs and application events go to `logs/app.log` locally, including timestamp, method/path/status and authentication, validation, authorization, startup, and error events. On Vercel, the logger writes to writable, ephemeral `/tmp/logs/app.log`; use Vercel function logs for deployed diagnostics. Passwords and full tokens are excluded. A sanitized example is in `logs/sample.log`. `GET /health` reports service state, MongoDB connection state, and timestamp.
 
 ## Postman evidence
 
-The collection covers endpoint success and common validation/authentication errors, including two-user ownership checks. Run it against a database you control, then capture actual Postman responses and MongoDB screenshots for submission. The collection creates sample users and stores tokens and employee IDs as variables.
+The collection contains 66 ordered requests with assertions for success, duplicate accounts, invalid/missing input, authentication, CRUD, both directions of cross-user access, non-existing records, malformed IDs/JSON, response security headers, and 429 rate limiting. Run it against a test database you control. It creates two throwaway users and stores JWTs and employee IDs as collection variables. Sample marking password: `ExamplePass123!`; usernames and emails are generated for each run. Do not reuse this sample password for a real account.
 
 ## Vercel deployment
 

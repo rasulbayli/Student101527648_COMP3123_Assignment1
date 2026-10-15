@@ -1,1 +1,2323 @@
-{"info":{"name":"COMP3123 Assignment 1 API","description":"Endpoint, validation, authentication, employee CRUD, ownership, and health checks. Run against a database you control.","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},"variable":[{"key":"baseUrl","value":"http://localhost:3000"},{"key":"userA","value":"studentA_{{$timestamp}}"},{"key":"emailA","value":"studentA_{{$timestamp}}@example.com"},{"key":"passwordA","value":"ExamplePass123!"},{"key":"userB","value":"studentB_{{$timestamp}}"},{"key":"emailB","value":"studentB_{{$timestamp}}@example.com"},{"key":"passwordB","value":"ExamplePass123!"},{"key":"tokenA","value":""},{"key":"tokenB","value":""},{"key":"employeeA","value":""},{"key":"employeeB","value":""}],"item":[{"name":"Health","item":[{"name":"GET health","request":{"method":"GET","url":"{{baseUrl}}/health"}}]},{"name":"Users","item":[{"name":"Signup A","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"username\":\"{{userA}}\",\"email\":\"{{emailA}}\",\"password\":\"{{passwordA}}\"}"},"url":"{{baseUrl}}/api/v1/user/signup"}},{"name":"Signup B","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"username\":\"{{userB}}\",\"email\":\"{{emailB}}\",\"password\":\"{{passwordB}}\"}"},"url":"{{baseUrl}}/api/v1/user/signup"}},{"name":"Duplicate signup (409)","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"username\":\"{{userA}}\",\"email\":\"{{emailA}}\",\"password\":\"{{passwordA}}\"}"},"url":"{{baseUrl}}/api/v1/user/signup"}},{"name":"Invalid signup data (400)","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"username\":\"bad\",\"email\":\"invalid\",\"password\":\"short\"}"},"url":"{{baseUrl}}/api/v1/user/signup"}},{"name":"Login A username","event":[{"listen":"test","script":{"exec":["if (pm.response.code === 200) pm.collectionVariables.set('tokenA', pm.response.json().token);"]}}],"request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"username\":\"{{userA}}\",\"password\":\"{{passwordA}}\"}"},"url":"{{baseUrl}}/api/v1/user/login"}},{"name":"Login B email","event":[{"listen":"test","script":{"exec":["if (pm.response.code === 200) pm.collectionVariables.set('tokenB', pm.response.json().token);"]}}],"request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"email\":\"{{emailB}}\",\"password\":\"{{passwordB}}\"}"},"url":"{{baseUrl}}/api/v1/user/login"}},{"name":"Invalid login (401)","request":{"method":"POST","header":[{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"username\":\"{{userA}}\",\"password\":\"wrong\"}"},"url":"{{baseUrl}}/api/v1/user/login"}}]},{"name":"Employees","item":[{"name":"List without JWT (401)","request":{"method":"GET","url":"{{baseUrl}}/api/v1/emp/employees"}},{"name":"Create employee A","event":[{"listen":"test","script":{"exec":["if (pm.response.code === 201) pm.collectionVariables.set('employeeA', pm.response.json().employee._id);"]}}],"request":{"method":"POST","header":[{"key":"Authorization","value":"Bearer {{tokenA}}"},{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"first_name\":\"Alex\",\"last_name\":\"Morgan\",\"email\":\"alex@example.com\",\"position\":\"Analyst\",\"salary\":65000,\"date_of_joining\":\"2025-01-15\",\"department\":\"Finance\"}"},"url":"{{baseUrl}}/api/v1/emp/employees"}},{"name":"Missing employee fields (400)","request":{"method":"POST","header":[{"key":"Authorization","value":"Bearer {{tokenA}}"},{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"first_name\":\"Only\"}"},"url":"{{baseUrl}}/api/v1/emp/employees"}},{"name":"List employees A","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{tokenA}}"}],"url":"{{baseUrl}}/api/v1/emp/employees"}},{"name":"Get employee A","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{tokenA}}"}],"url":"{{baseUrl}}/api/v1/emp/employees/{{employeeA}}"}},{"name":"Update employee A","request":{"method":"PUT","header":[{"key":"Authorization","value":"Bearer {{tokenA}}"},{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"first_name\":\"Alex\",\"last_name\":\"Morgan\",\"email\":\"alex@example.com\",\"position\":\"Senior Analyst\",\"salary\":72000,\"date_of_joining\":\"2025-01-15\",\"department\":\"Finance\"}"},"url":"{{baseUrl}}/api/v1/emp/employees/{{employeeA}}"}},{"name":"Delete employee A","request":{"method":"DELETE","header":[{"key":"Authorization","value":"Bearer {{tokenA}}"}],"url":"{{baseUrl}}/api/v1/emp/employees?eid={{employeeA}}"}}]},{"name":"Ownership and invalid IDs","item":[{"name":"Create employee B","event":[{"listen":"test","script":{"exec":["if (pm.response.code === 201) pm.collectionVariables.set('employeeB', pm.response.json().employee._id);"]}}],"request":{"method":"POST","header":[{"key":"Authorization","value":"Bearer {{tokenB}}"},{"key":"Content-Type","value":"application/json"}],"body":{"mode":"raw","raw":"{\"first_name\":\"Jamie\",\"last_name\":\"Lee\",\"email\":\"jamie@example.com\",\"position\":\"Designer\",\"salary\":70000,\"date_of_joining\":\"2025-02-01\",\"department\":\"Product\"}"},"url":"{{baseUrl}}/api/v1/emp/employees"}},{"name":"A cannot get B employee (404)","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{tokenA}}"}],"url":"{{baseUrl}}/api/v1/emp/employees/{{employeeB}}"}},{"name":"Invalid employee ID (400)","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{tokenA}}"}],"url":"{{baseUrl}}/api/v1/emp/employees/not-an-object-id"}},{"name":"Invalid JWT (401)","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer invalid.token"}],"url":"{{baseUrl}}/api/v1/emp/employees"}}]}]}
+{
+  "info": {
+    "name": "COMP3123 Assignment 1 API - Complete Evidence Run",
+    "description": "Full COMP3123 Assignment 1 endpoint, validation, security, ownership, logging, health and rate-limit test suite. Uses throwaway test accounts. Run against a test database only.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "userA",
+      "value": ""
+    },
+    {
+      "key": "emailA",
+      "value": ""
+    },
+    {
+      "key": "passwordA",
+      "value": "ExamplePass123!"
+    },
+    {
+      "key": "userB",
+      "value": ""
+    },
+    {
+      "key": "emailB",
+      "value": ""
+    },
+    {
+      "key": "passwordB",
+      "value": "ExamplePass123!"
+    },
+    {
+      "key": "userBId",
+      "value": ""
+    },
+    {
+      "key": "tokenA",
+      "value": ""
+    },
+    {
+      "key": "tokenB",
+      "value": ""
+    },
+    {
+      "key": "employeeA",
+      "value": ""
+    },
+    {
+      "key": "employeeB",
+      "value": ""
+    },
+    {
+      "key": "runId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Health and security",
+      "item": [
+        {
+          "name": "GET health (200)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/health"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Health reports service status\",()=>pm.expect(pm.response.json().status).to.eql(\"ok\"));",
+                  "pm.test(\"Database connected\",()=>pm.expect(pm.response.json().database).to.eql(\"connected\"));",
+                  "pm.test(\"Helmet adds nosniff header\",()=>pm.expect(pm.response.headers.get(\"X-Content-Type-Options\")).to.eql(\"nosniff\"));",
+                  "pm.test(\"Helmet adds frame protection\",()=>pm.expect(pm.response.headers.get(\"X-Frame-Options\")).to.exist);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Unsupported route (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/not-a-route"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Error response is JSON\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Signup and login",
+      "item": [
+        {
+          "name": "Signup user A (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"{{userA}}\",\"email\":\"{{emailA}}\",\"password\":\"{{passwordA}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if(!pm.collectionVariables.get('runId')){",
+                  " const id=pm.variables.replaceIn('{{$guid}}').replaceAll('-','');",
+                  " pm.collectionVariables.set('runId',id);",
+                  " pm.collectionVariables.set('userA','studentA_'+id);",
+                  " pm.collectionVariables.set('emailA','studentA_'+id+'@example.com');",
+                  " pm.collectionVariables.set('userB','studentB_'+id);",
+                  " pm.collectionVariables.set('emailB','studentB_'+id+'@example.com');",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"Signup omits password\",()=>pm.expect(pm.response.json().user).to.not.have.property(\"password\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Signup user B (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"{{userB}}\",\"email\":\"{{emailB}}\",\"password\":\"{{passwordB}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if(pm.response.code===201)pm.collectionVariables.set('userBId',pm.response.json().user.id);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"Signup omits password\",()=>pm.expect(pm.response.json().user).to.not.have.property(\"password\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Duplicate username (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"{{userA}}\",\"email\":\"another_{{runId}}@example.com\",\"password\":\"{{passwordA}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 409\", () => pm.response.to.have.status(409));",
+                  "pm.test(\"Duplicate account returns error\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Duplicate email (409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"another_{{runId}}\",\"email\":\"{{emailA}}\",\"password\":\"{{passwordA}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 409\", () => pm.response.to.have.status(409));",
+                  "pm.test(\"Duplicate account returns error\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Invalid signup email (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"validname\",\"email\":\"not-an-email\",\"password\":\"ExamplePass123!\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Validation failure returns error\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Invalid signup password (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"validname\",\"email\":\"valid_{{runId}}@example.com\",\"password\":\"short\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Validation failure returns error\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Missing signup fields (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Validation failure returns error\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login A by username (200)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"{{userA}}\",\"password\":\"{{passwordA}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if(pm.response.code===200)pm.collectionVariables.set('tokenA',pm.response.json().token);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"JWT returned\",()=>pm.expect(pm.response.json().token).to.be.a(\"string\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login B by email (200)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"{{emailB}}\",\"password\":\"{{passwordB}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if(pm.response.code===200)pm.collectionVariables.set('tokenB',pm.response.json().token);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"JWT returned\",()=>pm.expect(pm.response.json().token).to.be.a(\"string\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Invalid credentials (401)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"{{userA}}\",\"password\":\"wrong-password\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Credentials rejected\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Missing login credentials (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Missing credentials rejected\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Employee CRUD and validation",
+      "item": [
+        {
+          "name": "Employees without JWT (401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/emp/employees"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Authentication required\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Invalid JWT (401)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer invalid.jwt.value"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Invalid token rejected\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create employee A; owner comes from JWT (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"first_name\":\"Alex\",\"last_name\":\"Morgan\",\"email\":\"employeeA_{{runId}}@example.com\",\"position\":\"Analyst\",\"salary\":65000,\"date_of_joining\":\"2025-01-15\",\"department\":\"Finance\",\"user\":\"{{userBId}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if(pm.response.code===201)pm.collectionVariables.set('employeeA',pm.response.json().employee._id);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 201\", () => pm.response.to.have.status(201));",
+                  "pm.test(\"Owner assigned by authenticated user\",()=>{const p=JSON.parse(atob(pm.collectionVariables.get(\"tokenA\").split(\".\")[1]));pm.expect(pm.response.json().employee.user).to.eql(p.sub);});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Missing employee fields (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"first_name\":\"Only\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Required fields validated\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Invalid employee email (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"first_name\":\"Alex\",\"last_name\":\"Morgan\",\"email\":\"invalid\",\"position\":\"Analyst\",\"salary\":65000,\"date_of_joining\":\"2025-01-15\",\"department\":\"Finance\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Email validated\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Negative salary (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"first_name\":\"Alex\",\"last_name\":\"Morgan\",\"email\":\"negative_{{runId}}@example.com\",\"position\":\"Analyst\",\"salary\":-5,\"date_of_joining\":\"2025-01-15\",\"department\":\"Finance\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Salary must be non-negative\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Invalid joining date (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"first_name\":\"Alex\",\"last_name\":\"Morgan\",\"email\":\"date_{{runId}}@example.com\",\"position\":\"Analyst\",\"salary\":65000,\"date_of_joining\":\"not-a-date\",\"department\":\"Finance\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Date validated\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List A employees (200)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Employee A is listed\",()=>pm.expect(pm.response.json().employees.some(e=>e._id===pm.collectionVariables.get(\"employeeA\"))).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get employee A (200)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeA}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Employee details returned\",()=>pm.expect(pm.response.json().employee.first_name).to.eql(\"Alex\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update employee A (200)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeA}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"first_name\":\"Alex\",\"last_name\":\"Morgan\",\"email\":\"employeeA_{{runId}}@example.com\",\"position\":\"Senior Analyst\",\"salary\":72000,\"date_of_joining\":\"2025-01-15\",\"department\":\"Finance\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Employee update applied\",()=>pm.expect(pm.response.json().employee.position).to.eql(\"Senior Analyst\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create employee B (201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenB}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"first_name\":\"Jamie\",\"last_name\":\"Lee\",\"email\":\"employeeB_{{runId}}@example.com\",\"position\":\"Designer\",\"salary\":70000,\"date_of_joining\":\"2025-02-01\",\"department\":\"Product\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if(pm.response.code===201)pm.collectionVariables.set('employeeB',pm.response.json().employee._id);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "A list excludes B employee (200)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"User A sees only owned records\",()=>pm.expect(pm.response.json().employees.every(e=>e.user!==pm.collectionVariables.get(\"userBId\"))).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "B list contains B employee (200)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenB}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"User B sees own record\",()=>pm.expect(pm.response.json().employees.some(e=>e._id===pm.collectionVariables.get(\"employeeB\"))).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "A cannot get B employee (404)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeB}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Cross-user read denied\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "A cannot update B employee (404)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeB}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"position\":\"Unauthorized edit\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Cross-user update denied\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "A cannot delete B employee (404)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees?eid={{employeeB}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Cross-user deletion denied\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "B cannot get A employee (404)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenB}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeA}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Reverse cross-user read denied\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "B cannot update A employee (404)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenB}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeA}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"position\":\"Unauthorized edit\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Reverse cross-user update denied\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "B cannot delete A employee (404)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenB}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees?eid={{employeeA}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Reverse cross-user deletion denied\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "B can still access B employee (200)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenB}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeB}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "A can still access A employee (200)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeA}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Invalid employee ID (400)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees/not-an-object-id"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Malformed ID rejected\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Invalid update ID (400)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees/not-an-object-id",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"position\":\"x\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Malformed update ID rejected\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Invalid delete ID (400)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees?eid=not-an-object-id"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Malformed delete ID rejected\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nonexistent employee GET (404)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees/507f1f77bcf86cd799439011"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Unknown employee rejected\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nonexistent employee update (404)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees/507f1f77bcf86cd799439011",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"position\":\"Never created\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Unknown employee update rejected\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nonexistent employee delete (404)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees?eid=507f1f77bcf86cd799439011"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Unknown employee delete rejected\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Malformed JSON (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Malformed JSON has safe message\",()=>pm.expect(pm.response.json().error).to.eql(\"Invalid JSON request body\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete A employee (204)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees?eid={{employeeA}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 204\", () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Deleted A employee now returns 404",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenA}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeA}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"Deleted employee not found\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Delete B employee (204)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenB}}"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/emp/employees?eid={{employeeB}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 204\", () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Login rate limit",
+      "item": [
+        {
+          "name": "Login attempt 1 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.77"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Request remains under rate limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login attempt 2 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.77"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Request remains under rate limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login attempt 3 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.77"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Request remains under rate limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login attempt 4 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.77"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Request remains under rate limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login attempt 5 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.77"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Request remains under rate limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login attempt 6 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.77"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Request remains under rate limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login attempt 7 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.77"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Request remains under rate limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login attempt 8 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.77"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Request remains under rate limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login attempt 9 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.77"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Request remains under rate limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login attempt 10 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.77"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 401\", () => pm.response.to.have.status(401));",
+                  "pm.test(\"Request remains under rate limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login attempt 11 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.77"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 429\", () => pm.response.to.have.status(429));",
+                  "pm.test(\"Rate limit returns an error\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Signup rate limit",
+      "item": [
+        {
+          "name": "Signup attempt 1 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.78"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Request remains under signup limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Signup attempt 2 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.78"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Request remains under signup limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Signup attempt 3 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.78"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Request remains under signup limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Signup attempt 4 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.78"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Request remains under signup limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Signup attempt 5 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.78"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Request remains under signup limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Signup attempt 6 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.78"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Request remains under signup limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Signup attempt 7 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.78"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Request remains under signup limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Signup attempt 8 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.78"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Request remains under signup limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Signup attempt 9 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.78"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Request remains under signup limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Signup attempt 10 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.78"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Request remains under signup limit\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Signup attempt 11 for rate limit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Forwarded-For",
+                "value": "198.51.100.78"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/user/signup",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP status is 429\", () => pm.response.to.have.status(429));",
+                  "pm.test(\"Signup rate limit returns an error\", () => pm.expect(pm.response.json()).to.have.property(\"error\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

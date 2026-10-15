@@ -58,6 +58,18 @@
       "value": ""
     }
   ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "if(pm.info.requestName==='GET health (200)'){const run=pm.variables.replaceIn('{{$guid}}').replaceAll('-','');const value=parseInt(run.slice(0,8),16)%131069;const ip=(n)=>'198.'+(18+Math.floor(n/65536))+'.'+Math.floor((n%65536)/256)+'.'+(n%256);pm.collectionVariables.set('normalTestIp',ip(value));pm.collectionVariables.set('loginTestIp',ip(value+1));pm.collectionVariables.set('signupTestIp',ip(value+2));pm.collectionVariables.set('missingLoginTestIp',ip(value+3));}",
+          "const name=pm.info.requestName||'';const key=name==='Missing login credentials (400)'?'missingLoginTestIp':name.startsWith('Login attempt ')?'loginTestIp':name.startsWith('Signup attempt ')?'signupTestIp':'normalTestIp';const ip=pm.collectionVariables.get(key);if(ip)pm.request.headers.upsert({key:'X-Forwarded-For',value:ip});"
+        ]
+      }
+    }
+  ],
   "item": [
     {
       "name": "Health and security",
@@ -137,7 +149,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "const id=pm.variables.replaceIn('{{$guid}}').replaceAll('-','');",
+                  "const id=pm.variables.replaceIn('{{$guid}}').replaceAll('-','').slice(0,20);",
                   "pm.collectionVariables.set('runId',id);",
                   "pm.collectionVariables.set('userA','studentA_'+id);",
                   "pm.collectionVariables.set('emailA','studentA_'+id+'@example.com');",
@@ -1056,7 +1068,7 @@
             "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeB}}",
             "body": {
               "mode": "raw",
-              "raw": "{\"position\":\"Unauthorized edit\"}",
+              "raw": "{\"first_name\":\"Unauthorized\",\"last_name\":\"Change\",\"email\":\"security-test@example.com\",\"position\":\"Unauthorized edit\",\"salary\":1,\"date_of_joining\":\"2025-01-01\",\"department\":\"Engineering\"}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1157,7 +1169,7 @@
             "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeA}}",
             "body": {
               "mode": "raw",
-              "raw": "{\"position\":\"Unauthorized edit\"}",
+              "raw": "{\"first_name\":\"Unauthorized\",\"last_name\":\"Change\",\"email\":\"security-test@example.com\",\"position\":\"Unauthorized edit\",\"salary\":1,\"date_of_joining\":\"2025-01-01\",\"department\":\"Engineering\"}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1415,7 +1427,7 @@
             "url": "{{baseUrl}}/api/v1/emp/employees/507f1f77bcf86cd799439011",
             "body": {
               "mode": "raw",
-              "raw": "{\"position\":\"Never created\"}",
+              "raw": "{\"first_name\":\"Unauthorized\",\"last_name\":\"Change\",\"email\":\"security-test@example.com\",\"position\":\"Never created\",\"salary\":1,\"date_of_joining\":\"2025-01-01\",\"department\":\"Engineering\"}",
               "options": {
                 "raw": {
                   "language": "json"

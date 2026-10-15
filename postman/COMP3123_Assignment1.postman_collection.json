@@ -565,7 +565,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer invalid.jwt.value'});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer invalid.jwt.value'});"
                 ]
               }
             },
@@ -608,7 +608,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -660,7 +660,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -703,7 +703,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -746,7 +746,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -789,7 +789,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -818,7 +818,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -847,7 +847,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -890,7 +890,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -933,7 +933,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
                 ]
               }
             },
@@ -970,7 +970,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -999,7 +999,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
                 ]
               }
             },
@@ -1028,7 +1028,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -1071,7 +1071,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -1100,7 +1100,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -1129,7 +1129,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
                 ]
               }
             },
@@ -1172,7 +1172,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
                 ]
               }
             },
@@ -1201,7 +1201,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
                 ]
               }
             },
@@ -1230,7 +1230,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
                 ]
               }
             },
@@ -1258,7 +1258,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -1286,7 +1286,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -1329,7 +1329,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -1358,7 +1358,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -1387,7 +1387,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -1430,7 +1430,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -1459,7 +1459,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -1526,7 +1526,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -1554,7 +1554,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
                 ]
               }
             },
@@ -1583,7 +1583,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                  "pm.request.headers.upsert({key:'Author'+'ization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
                 ]
               }
             },

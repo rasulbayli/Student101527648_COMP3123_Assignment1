@@ -37,7 +37,7 @@ Request logs and application events go to `logs/app.log` locally, including time
 
 ## Postman evidence
 
-The collection contains 66 ordered requests with assertions for success, duplicate accounts, invalid/missing input, authentication, CRUD, both directions of cross-user access, non-existing records, malformed IDs/JSON, response security headers, and 429 rate limiting. Run it against a test database you control. It creates two throwaway users and stores JWTs and employee IDs as collection variables. It uses reserved test IP addresses in `X-Forwarded-For` to keep the ordinary validation checks separate from the deliberate rate-limit bursts; use this collection only with a test API. Sample marking password: `ExamplePass123!`; usernames and emails are generated for each run. Do not reuse this sample password for a real account.
+The collection contains 66 ordered requests with assertions for success, duplicate accounts, invalid/missing input, authentication, CRUD, both directions of cross-user access, non-existing records, malformed IDs/JSON, response security headers, and 429 rate limiting. Run it against a test database you control. It creates two throwaway users and stores JWTs and employee IDs as collection variables. It uses reserved test IP addresses in `X-Forwarded-For` for deliberate rate-limit bursts; use this collection only with a test API. For local runs, ordinary requests use IPv4 and rate-limit requests use IPv6 to keep their rate-limit buckets separate. When `baseUrl` points to a hosted API, both request groups use that host. Sample marking password: `ExamplePass123!`; usernames and emails are generated for each run. Do not reuse this sample password for a real account.
 
 ## Vercel deployment
 

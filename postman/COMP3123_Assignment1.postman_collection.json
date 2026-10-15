@@ -7,7 +7,7 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:3000"
+      "value": "http://127.0.0.1:3000"
     },
     {
       "key": "userA",
@@ -56,6 +56,10 @@
     {
       "key": "runId",
       "value": ""
+    },
+    {
+      "key": "rateTestBaseUrl",
+      "value": "http://[::1]:3000"
     }
   ],
   "event": [
@@ -64,8 +68,8 @@
       "script": {
         "type": "text/javascript",
         "exec": [
-          "if(pm.info.requestName==='GET health (200)'){const run=pm.variables.replaceIn('{{$guid}}').replaceAll('-','');const value=parseInt(run.slice(0,8),16)%131069;const ip=(n)=>'198.'+(18+Math.floor(n/65536))+'.'+Math.floor((n%65536)/256)+'.'+(n%256);pm.collectionVariables.set('normalTestIp',ip(value));pm.collectionVariables.set('loginTestIp',ip(value+1));pm.collectionVariables.set('signupTestIp',ip(value+2));pm.collectionVariables.set('missingLoginTestIp',ip(value+3));}",
-          "const name=pm.info.requestName||'';const key=name==='Missing login credentials (400)'?'missingLoginTestIp':name.startsWith('Login attempt ')?'loginTestIp':name.startsWith('Signup attempt ')?'signupTestIp':'normalTestIp';const ip=pm.collectionVariables.get(key);if(ip)pm.request.headers.upsert({key:'X-Forwarded-For',value:ip});"
+          "if(pm.info.requestName==='GET health (200)'){const run=pm.variables.replaceIn('{{$guid}}').replaceAll('-','');const value=parseInt(run.slice(0,8),16)%131069;const ip=(n)=>'198.'+(18+Math.floor(n/65536))+'.'+Math.floor((n%65536)/256)+'.'+(n%256);const base=pm.collectionVariables.get('baseUrl')||'';const local=/^https?:\\/\\/(localhost|127\\.0\\.0\\.1|\\[::1\\])(:\\d+)?$/i.test(base);const rateBase=local?base.replace(/localhost|127\\.0\\.0\\.1|\\[::1\\]/i,'[::1]'):base;pm.collectionVariables.set('rateTestBaseUrl',rateBase);pm.collectionVariables.set('normalTestIp',ip(value));pm.collectionVariables.set('loginTestIp',ip(value+1));pm.collectionVariables.set('signupTestIp',ip(value+2));pm.collectionVariables.set('missingLoginTestIp',ip(value+3));}",
+          "const name=pm.info.requestName||'';const key=name==='Missing login credentials (400)'?'missingLoginTestIp':name.startsWith('Login attempt ')?'loginTestIp':name.startsWith('Signup attempt ')?'signupTestIp':'normalTestIp';const ip=pm.collectionVariables.get(key);if(ip)pm.request.headers.upsert({key:'X-Forwarded-For',value:ip});if(name.startsWith('Signup attempt ')||name.startsWith('Login attempt ')){const rateBase=pm.collectionVariables.get('rateTestBaseUrl');if(rateBase)pm.request.url.update(rateBase+pm.request.url.path.join('/'));}"
         ]
       }
     }
@@ -1628,7 +1632,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/login",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/login",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
@@ -1666,7 +1670,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/login",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/login",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
@@ -1704,7 +1708,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/login",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/login",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
@@ -1742,7 +1746,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/login",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/login",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
@@ -1780,7 +1784,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/login",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/login",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
@@ -1818,7 +1822,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/login",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/login",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
@@ -1856,7 +1860,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/login",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/login",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
@@ -1894,7 +1898,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/login",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/login",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
@@ -1932,7 +1936,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/login",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/login",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
@@ -1970,7 +1974,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/login",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/login",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
@@ -2008,7 +2012,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/login",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/login",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"rate_limit_unknown\",\"password\":\"wrong-password\"}",
@@ -2051,7 +2055,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/signup",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/signup",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
@@ -2089,7 +2093,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/signup",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/signup",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
@@ -2127,7 +2131,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/signup",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/signup",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
@@ -2165,7 +2169,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/signup",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/signup",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
@@ -2203,7 +2207,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/signup",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/signup",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
@@ -2241,7 +2245,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/signup",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/signup",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
@@ -2279,7 +2283,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/signup",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/signup",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
@@ -2317,7 +2321,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/signup",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/signup",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
@@ -2355,7 +2359,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/signup",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/signup",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
@@ -2393,7 +2397,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/signup",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/signup",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",
@@ -2431,7 +2435,7 @@
                 "value": "application/json"
               }
             ],
-            "url": "{{baseUrl}}/api/v1/user/signup",
+            "url": "{{rateTestBaseUrl}}/api/v1/user/signup",
             "body": {
               "mode": "raw",
               "raw": "{\"username\":\"x\",\"email\":\"bad\",\"password\":\"x\"}",

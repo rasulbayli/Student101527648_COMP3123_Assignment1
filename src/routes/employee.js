@@ -1,0 +1,12 @@
+const router = require('express').Router();
+const authenticate = require('../middleware/auth');
+const validate = require('../middleware/validate');
+const { employee, idParam, deleteId } = require('../validators');
+const handlers = require('../controllers/employees');
+router.use(authenticate);
+router.get('/employees', handlers.list);
+router.post('/employees', employee, validate, handlers.create);
+router.get('/employees/:eid', idParam, validate, handlers.get);
+router.put('/employees/:eid', idParam, employee, validate, handlers.update);
+router.delete('/employees', deleteId, validate, handlers.remove);
+module.exports = router;

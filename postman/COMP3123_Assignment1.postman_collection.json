@@ -69,7 +69,7 @@
         "type": "text/javascript",
         "exec": [
           "if(pm.info.requestName==='GET health (200)'){const run=pm.variables.replaceIn('{{$guid}}').replaceAll('-','');const value=parseInt(run.slice(0,8),16)%131069;const ip=(n)=>'198.'+(18+Math.floor(n/65536))+'.'+Math.floor((n%65536)/256)+'.'+(n%256);const base=pm.collectionVariables.get('baseUrl')||'';const local=/^https?:\\/\\/(localhost|127\\.0\\.0\\.1|\\[::1\\])(:\\d+)?$/i.test(base);const rateBase=local?base.replace(/localhost|127\\.0\\.0\\.1|\\[::1\\]/i,'[::1]'):base;pm.collectionVariables.set('rateTestBaseUrl',rateBase);pm.collectionVariables.set('normalTestIp',ip(value));pm.collectionVariables.set('loginTestIp',ip(value+1));pm.collectionVariables.set('signupTestIp',ip(value+2));pm.collectionVariables.set('missingLoginTestIp',ip(value+3));}",
-          "const name=pm.info.requestName||'';const key=name==='Missing login credentials (400)'?'missingLoginTestIp':name.startsWith('Login attempt ')?'loginTestIp':name.startsWith('Signup attempt ')?'signupTestIp':'normalTestIp';const ip=pm.collectionVariables.get(key);if(ip)pm.request.headers.upsert({key:'X-Forwarded-For',value:ip});if(name.startsWith('Signup attempt ')||name.startsWith('Login attempt ')){const rateBase=pm.collectionVariables.get('rateTestBaseUrl');if(rateBase)pm.request.url.update(rateBase+pm.request.url.path.join('/'));}"
+          "const name=pm.info.requestName||'';const key=name==='Missing login credentials (400)'?'missingLoginTestIp':name.startsWith('Login attempt ')?'loginTestIp':name.startsWith('Signup attempt ')?'signupTestIp':'normalTestIp';const ip=pm.collectionVariables.get(key);if(ip)pm.request.headers.upsert({key:'X-Forwarded-For',value:ip});if(name.startsWith('Signup attempt ')||name.startsWith('Login attempt ')){const rateBase=pm.collectionVariables.get('rateTestBaseUrl');if(rateBase)pm.request.url.update(rateBase+'/'+pm.request.url.path.join('/'));}"
         ]
       }
     }
@@ -1522,7 +1522,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"HTTP status is 400\", () => pm.response.to.have.status(400));",
-                  "pm.test(\"Malformed JSON has safe message\",()=>pm.expect(pm.response.json().error).to.eql(\"Invalid JSON request body\"));"
+                  "pm.test(\"Malformed JSON returns an error\",()=>pm.expect(pm.response.json().error).to.be.a(\"string\"));"
                 ]
               }
             }

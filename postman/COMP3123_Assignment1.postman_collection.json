@@ -137,14 +137,13 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "if(!pm.collectionVariables.get('runId')){",
-                  " const id=pm.variables.replaceIn('{{$guid}}').replaceAll('-','');",
-                  " pm.collectionVariables.set('runId',id);",
-                  " pm.collectionVariables.set('userA','studentA_'+id);",
-                  " pm.collectionVariables.set('emailA','studentA_'+id+'@example.com');",
-                  " pm.collectionVariables.set('userB','studentB_'+id);",
-                  " pm.collectionVariables.set('emailB','studentB_'+id+'@example.com');",
-                  "}"
+                  "const id=pm.variables.replaceIn('{{$guid}}').replaceAll('-','');",
+                  "pm.collectionVariables.set('runId',id);",
+                  "pm.collectionVariables.set('userA','studentA_'+id);",
+                  "pm.collectionVariables.set('emailA','studentA_'+id+'@example.com');",
+                  "pm.collectionVariables.set('userB','studentB_'+id);",
+                  "pm.collectionVariables.set('emailB','studentB_'+id+'@example.com');",
+                  "pm.request.body.raw=JSON.stringify({username:'studentA_'+id,email:'studentA_'+id+'@example.com',password:pm.collectionVariables.get('passwordA')});"
                 ]
               }
             },

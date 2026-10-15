@@ -556,15 +556,19 @@
           "name": "Invalid JWT (401)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer invalid.jwt.value"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer invalid.jwt.value'});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -583,10 +587,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -603,6 +603,15 @@
             }
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -630,10 +639,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -650,6 +655,15 @@
             }
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -668,10 +682,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -688,6 +698,15 @@
             }
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -706,10 +725,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -726,6 +741,15 @@
             }
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -744,10 +768,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -765,6 +785,15 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -780,15 +809,19 @@
           "name": "List A employees (200)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -805,15 +838,19 @@
           "name": "Get employee A (200)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeA}}"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -832,10 +869,6 @@
             "method": "PUT",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -852,6 +885,15 @@
             }
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -870,10 +912,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{tokenB}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -890,6 +928,15 @@
             }
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -914,15 +961,19 @@
           "name": "A list excludes B employee (200)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -939,15 +990,19 @@
           "name": "B list contains B employee (200)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenB}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -964,15 +1019,19 @@
           "name": "A cannot get B employee (404)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeB}}"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -991,10 +1050,6 @@
             "method": "PUT",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -1012,6 +1067,15 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -1027,15 +1091,19 @@
           "name": "A cannot delete B employee (404)",
           "request": {
             "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees?eid={{employeeB}}"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1052,15 +1120,19 @@
           "name": "B cannot get A employee (404)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenB}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeA}}"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1079,10 +1151,6 @@
             "method": "PUT",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{tokenB}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -1100,6 +1168,15 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -1115,15 +1192,19 @@
           "name": "B cannot delete A employee (404)",
           "request": {
             "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenB}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees?eid={{employeeA}}"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1140,15 +1221,19 @@
           "name": "B can still access B employee (200)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenB}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeB}}"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1164,15 +1249,19 @@
           "name": "A can still access A employee (200)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeA}}"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1188,15 +1277,19 @@
           "name": "Invalid employee ID (400)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees/not-an-object-id"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1215,10 +1308,6 @@
             "method": "PUT",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -1236,6 +1325,15 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -1251,15 +1349,19 @@
           "name": "Invalid delete ID (400)",
           "request": {
             "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees?eid=not-an-object-id"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1276,15 +1378,19 @@
           "name": "Nonexistent employee GET (404)",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees/507f1f77bcf86cd799439011"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1303,10 +1409,6 @@
             "method": "PUT",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              },
-              {
                 "key": "Content-Type",
                 "value": "application/json"
               }
@@ -1324,6 +1426,15 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
@@ -1339,15 +1450,19 @@
           "name": "Nonexistent employee delete (404)",
           "request": {
             "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees?eid=507f1f77bcf86cd799439011"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1402,15 +1517,19 @@
           "name": "Delete A employee (204)",
           "request": {
             "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees?eid={{employeeA}}"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1426,15 +1545,19 @@
           "name": "Deleted A employee now returns 404",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenA}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees/{{employeeA}}"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenA')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1451,15 +1574,19 @@
           "name": "Delete B employee (204)",
           "request": {
             "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{tokenB}}"
-              }
-            ],
+            "header": [],
             "url": "{{baseUrl}}/api/v1/emp/employees?eid={{employeeB}}"
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.upsert({key:'Authorization',value:'Be'+'arer '+pm.collectionVariables.get('tokenB')});"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {

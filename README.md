@@ -41,7 +41,9 @@ The collection contains 66 ordered requests with assertions for success, duplica
 
 ## Vercel deployment
 
-`api/index.js` and `vercel.json` configure Express for Vercel. Add `MONGODB_URI`, `JWT_SECRET`, and optionally `JWT_EXPIRES_IN` to Vercel project environment variables, deploy, and check `/health`. Configure MongoDB Atlas access for the deployment.
+The deployed API is available at https://student101527648-comp-3123-assignme.vercel.app. Check `/health` for service and database status.
+
+`api/index.js` and `vercel.json` configure Express for Vercel. For a new deployment, add `MONGODB_URI`, `JWT_SECRET`, and optionally `JWT_EXPIRES_IN` to Vercel project environment variables, deploy, and check `/health`. Configure MongoDB Atlas access for the deployment.
 
 ## Project structure
 
